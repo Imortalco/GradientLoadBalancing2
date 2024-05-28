@@ -27,7 +27,7 @@ class Cluster
 
     public double GetAverageLoad()
     {
-        return WorkerNodes.Average(s => s.QueueLength);
+        return WorkerNodes.Average(s => s.TotalLoad);
     }
 
     public double GetLoadDeviationPercentage()
@@ -38,7 +38,8 @@ class Cluster
             return 0;
         }
 
-        double totalDeviation = WorkerNodes.Sum(s => Math.Abs(s.QueueLength - averageLoad));
+        double totalDeviation = WorkerNodes.Sum(s => Math.Abs(s.TotalLoad - averageLoad));
+
         return (totalDeviation / (WorkerNodes.Length * averageLoad)) * 100;
     }
 
@@ -91,5 +92,11 @@ class Cluster
         {
             Console.WriteLine($"WorkerNode {workerNode.Id}: TasksProcessed = {workerNode.TasksProcessed}, TotalLoad = {workerNode.TotalLoad}");
         }
+    }
+
+    public void PrintFirstWorkerNodeStatistics()
+    { 
+        Console.WriteLine($"WorkerNode {WorkerNodes[0].Id}: TasksProcessed = {WorkerNodes[0].TasksProcessed}, TotalLoad = {WorkerNodes[0].TotalLoad}");
+        
     }
 }

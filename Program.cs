@@ -36,42 +36,42 @@ namespace GradientLoadBalancing2
 
             // With load balancing
             Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+            //stopwatch.Start();
 
-            var addTasksTask = Task.Run(async () =>
-            {
-                foreach (var taskTime in taskTimes)
-                {
-                    await loadBalancer.AddTaskAsync(taskTime);
-                }
-            });
+            //var addTasksTask = Task.Run(async () =>
+            //{
+            //    foreach (var taskTime in taskTimes)
+            //    {
+            //        await loadBalancer.AddTaskAsync(taskTime);
+            //    }
+            //});
 
-            var balanceTask = Task.Run(async () =>
-            {
-                while (cluster.WorkerNodes.Any(w => w.Queue.Any()))
-                {
-                    await loadBalancer.BalanceLoadAsync();
-                    await Task.Delay(10); // periodically balance the load
-                }
-            });
+            //var balanceTask = Task.Run(async () =>
+            //{
+            //    while (cluster.WorkerNodes.Any(w => w.Queue.Any()))
+            //    {
+            //        await loadBalancer.BalanceLoadAsync();
+            //        await Task.Delay(10); // periodically balance the load
+            //    }
+            //});
 
-            var processingTask = cluster.ProcessAllTasksAsync();
+            //var processingTask = cluster.ProcessAllTasksAsync();
 
-            await Task.WhenAll(addTasksTask, balanceTask, processingTask);
+            //await Task.WhenAll(addTasksTask, balanceTask, processingTask);
 
-            int totalProcessingTimeWithDistribution = processingTask.Result;
+            //int totalProcessingTimeWithDistribution = processingTask.Result;
 
-            stopwatch.Stop();
-            TimeSpan timeWithDistribution = stopwatch.Elapsed;
+            //stopwatch.Stop();
+            //TimeSpan timeWithDistribution = stopwatch.Elapsed;
 
-            Console.WriteLine("Time with load balancing: " + timeWithDistribution.TotalMilliseconds + " ms");
-            //Console.WriteLine("Total processing time with load balancing: " + totalProcessingTimeWithDistribution);
-            Console.WriteLine("Average load: " + cluster.GetAverageLoad());
-            Console.WriteLine("Average load deviation percentage: " + cluster.GetLoadDeviationPercentage() + "%");
-            cluster.PrintWorkerNodeStatistics();
+            //Console.WriteLine("Time with load balancing: " + timeWithDistribution.TotalMilliseconds + " ms");
+            ////Console.WriteLine("Total processing time with load balancing: " + totalProcessingTimeWithDistribution);
+            //Console.WriteLine("Average load: " + cluster.GetAverageLoad());
+            //Console.WriteLine("Average load deviation percentage: " + cluster.GetLoadDeviationPercentage() + "%");
+            //cluster.PrintWorkerNodeStatistics();
 
             //Without load balancing
-           cluster = new Cluster(dimensions);
+            cluster = new Cluster(dimensions);
             stopwatch.Reset();
             stopwatch.Start();
 
@@ -82,7 +82,7 @@ namespace GradientLoadBalancing2
 
             Console.WriteLine("Time without load balancing: " + timeWithoutDistribution.TotalMilliseconds + " ms");
             //Console.WriteLine("Total processing time without load balancing: " + totalProcessingTimeWithoutDistribution);
-            cluster.PrintWorkerNodeStatistics();
+            cluster.PrintFirstWorkerNodeStatistics();
         }
 
     }
